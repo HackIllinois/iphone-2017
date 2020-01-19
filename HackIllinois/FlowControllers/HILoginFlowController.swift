@@ -10,10 +10,10 @@
 //  this license in a file with the distribution.
 //
 
+import AuthenticationServices
 import UIKit
 import APIManager
 import Lottie
-import SafariServices
 import Keychain
 import HIAPI
 
@@ -37,7 +37,7 @@ class HILoginFlowController: UIViewController {
     }
 
     // prevents the login session from going out of scope during presentation
-    var loginSession: SFAuthenticationSession?
+    var loginSession: ASWebAuthenticationSession?
 
     // MARK: ViewControllers
     lazy var loginSelectionViewController = HILoginSelectionViewController(delegate: self)
@@ -111,7 +111,7 @@ extension HILoginFlowController {
 private extension HILoginFlowController {
     private func attemptOAuthLogin(buildingUser user: HIUser, sender: HIBaseViewController) {
         let loginURL = HIAPI.AuthService.oauthURL(provider: user.provider)
-        loginSession = SFAuthenticationSession(url: loginURL, callbackURLScheme: nil) { [weak self] (url, error) in
+        loginSession = ASWebAuthenticationSession(url: loginURL, callbackURLScheme: nil) { [weak self] (url, error) in
             if let url = url,
                 let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
                 let queryItems = components.queryItems,
@@ -121,7 +121,7 @@ private extension HILoginFlowController {
                 user.oauthCode = code
                 self?.exchangeOAuthCodeForAPIToken(buildingUser: user, sender: sender)
             } else if let error = error {
-                if (error as? SFAuthenticationError)?.code == SFAuthenticationError.canceledLogin {
+                if (error as? ASWebAuthenticationSessionError)?.code == .canceledLogin {
                     // do nothing
                 } else {
                     self?.presentAuthenticationFailure(withError: error, sender: sender)
@@ -131,6 +131,7 @@ private extension HILoginFlowController {
                 self?.presentAuthenticationFailure(withError: error, sender: sender)
             }
         }
+        loginSession?.presentationContextProvider = self
         loginSession?.start()
     }
 
@@ -229,5 +230,12 @@ extension HILoginFlowController: HILoginSelectionViewControllerDelegate {
                                       didMakeLoginSelection selection: HIAPI.AuthService.OAuthProvider) {
         let user = HIUser(provider: selection)
         attemptOAuthLogin(buildingUser: user, sender: loginSelectionViewController)
+    }
+}
+
+// MARK: - ASWebAuthenticationPresentationContextProviding
+extension HILoginFlowController: ASWebAuthenticationPresentationContextProviding {
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return self.view.window ?? ASPresentationAnchor()
     }
 }

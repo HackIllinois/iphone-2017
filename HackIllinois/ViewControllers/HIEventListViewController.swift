@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 import HIAPI
 import APIManager
+import os
 
 class HIEventListViewController: HIBaseViewController {
     let eventDetailViewController = HIEventDetailViewController()
@@ -25,7 +26,6 @@ extension HIEventListViewController {
         if let tableView = tableView {
             tableView.register(HIDateHeader.self, forHeaderFooterViewReuseIdentifier: HIDateHeader.identifier)
             tableView.register(HIEventCell.self, forCellReuseIdentifier: HIEventCell.identifier)
-            registerForPreviewing(with: self, sourceView: tableView)
         }
         super.setupTableView()
     }
@@ -58,6 +58,39 @@ extension HIEventListViewController {
         navigationController?.pushViewController(eventDetailViewController, animated: true)
         super.tableView(tableView, didSelectRowAt: indexPath)
     }
+
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let eventCell = tableView.cellForRow(at: indexPath) as? HIEventCell,
+            let event = _fetchedResultsController?.object(at: indexPath) as? Event else { return nil }
+
+        // Use favoritedButton button state instead of model state, essentially amounts to a debounce
+        var menuActions = [UIMenuElement]()
+        if eventCell.favoritedButton.isActive {
+            let unfavorite = UIAction(
+                title: "Unfavorite",
+                image: .heartSlashFill) { _ in
+                    self.unfavorite(event: event)
+            }
+            menuActions.append(unfavorite)
+        } else {
+            let favorite = UIAction(
+                title: "Favorite",
+                image: .heartFill) { _ in
+                    self.favorite(event: event)
+            }
+            menuActions.append(favorite)
+        }
+
+        let menu = UIMenu(title: "", children: menuActions)
+        let vc = eventDetailViewController
+        vc.event = event
+        let menuConfig = UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: { vc },
+            actionProvider: { _ in menu })
+
+        return menuConfig
+    }
 }
 
 // MARK: - UIRefreshControl
@@ -74,44 +107,58 @@ extension HIEventListViewController: HIEventCellDelegate {
         guard let indexPath = eventCell.indexPath,
             let event = _fetchedResultsController?.object(at: indexPath) as? Event else { return }
 
-        let changeFavoriteStatusRequest: APIRequest<Favorite> =
-            eventCell.favoritedButton.isActive ?
-                HIAPI.EventService.unfavoriteBy(id: event.id) :
-                HIAPI.EventService.favoriteBy(id: event.id)
+        // Use favoritedButton button state instead of model state, essentially amounts to a debounce
+        if eventCell.favoritedButton.isActive {
+            unfavorite(event: event)
+        } else {
+            favorite(event: event)
+        }
+    }
+}
 
-        changeFavoriteStatusRequest
+// MARK: - Actions
+extension HIEventListViewController {
+    private func favorite(event: Event) {
+        HIAPI.EventService.favoriteBy(id: event.id)
         .onCompletion { result in
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    event.favorite.toggle()
-                    event.favorite ?
-                        HILocalNotificationController.shared.scheduleNotification(for: event) :
-                        HILocalNotificationController.shared.unscheduleNotification(for: event)
+                    event.favorite = true
+                    HILocalNotificationController.shared.scheduleNotification(for: event)
                 }
             case .failure(let error):
-                print(error, error.localizedDescription)
+                os_log(
+                    "Favorite event by id failed with error: %s",
+                    log: Logger.api,
+                    type: .info,
+                    String(describing: error)
+                )
             }
         }
         .authorize(with: HIApplicationStateController.shared.user)
         .launch()
     }
-}
 
-// MARK: - UIViewControllerPreviewingDelegate
-extension HIEventListViewController: UIViewControllerPreviewingDelegate {
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        guard let tableView = tableView,
-            let indexPath = tableView.indexPathForRow(at: location),
-            let event = _fetchedResultsController?.object(at: indexPath) as? Event else {
-                return nil
+    private func unfavorite(event: Event) {
+        HIAPI.EventService.unfavoriteBy(id: event.id)
+        .onCompletion { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    event.favorite = false
+                    HILocalNotificationController.shared.unscheduleNotification(for: event)
+                }
+            case .failure(let error):
+                os_log(
+                    "Unfavorite event by id failed with error: %s",
+                    log: Logger.api,
+                    type: .info,
+                    String(describing: error)
+                )
+            }
         }
-        previewingContext.sourceRect = tableView.rectForRow(at: indexPath)
-        eventDetailViewController.event = event
-        return eventDetailViewController
-    }
-
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        navigationController?.pushViewController(viewControllerToCommit, animated: true)
+        .authorize(with: HIApplicationStateController.shared.user)
+        .launch()
     }
 }

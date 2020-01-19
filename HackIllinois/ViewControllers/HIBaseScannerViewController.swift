@@ -101,13 +101,14 @@ extension HIBaseScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
     }
 
     func setFrameForPreviewLayer() {
+        guard let scene = view.window?.windowScene else { return }
         guard let previewLayer = previewLayer else { return }
 
         previewLayer.frame = previewView.layer.bounds
 
         guard previewLayer.connection?.isVideoOrientationSupported == true else { return }
 
-        switch UIApplication.shared.statusBarOrientation {
+        switch scene.interfaceOrientation {
         case .portrait, .unknown:
             previewLayer.connection?.videoOrientation = .portrait
         case .portraitUpsideDown:

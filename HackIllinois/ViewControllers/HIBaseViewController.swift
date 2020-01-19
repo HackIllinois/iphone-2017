@@ -255,21 +255,23 @@ extension HIBaseViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
+    /// Needs to updated for iOS 13.0. Not currently used anywhere.
     func animateWithKeyboardLayout(notification: NSNotification, layout: ((CGRect) -> Void)?) {
-        guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+        guard /*let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
             let curveValue = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
-            let curve = UIView.AnimationCurve(rawValue: curveValue),
+            let curve = UIView.AnimationCurve(rawValue: curveValue),*/
             let keyboardFrameValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
         let keyboardFrame = keyboardFrameValue.cgRectValue
 
         layout?(keyboardFrame)
 
-        UIView.beginAnimations(nil, context: nil)
+        // Update this to use blocks
+        /*UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(duration)
         UIView.setAnimationCurve(curve)
         view.layoutIfNeeded()
-        UIView.commitAnimations()
+        UIView.commitAnimations()*/
     }
 }
 

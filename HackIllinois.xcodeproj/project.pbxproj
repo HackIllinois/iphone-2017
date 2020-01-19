@@ -97,6 +97,7 @@
 		95E3147421FAF1740092C22E /* SimpleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E3146621FAF1740092C22E /* SimpleRequest.swift */; };
 		95E3147521FAF1740092C22E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E3146721FAF1740092C22E /* User.swift */; };
 		95E3147621FAF1740092C22E /* Announcement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E3146821FAF1740092C22E /* Announcement.swift */; };
+		95E4FB5A23CC5F980069DB71 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4FB5923CC5F980069DB71 /* Images.swift */; };
 		95F5B4A0220BCFFF00C59992 /* HIIndoorMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5B49F220BCFFF00C59992 /* HIIndoorMapsViewController.swift */; };
 		95FC1D1E1FCBD20E00F8AD60 /* HIUserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FC1D1D1FCBD20E00F8AD60 /* HIUserDetailViewController.swift */; };
 		95FC79BE21E0199600715036 /* HIAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FC79BD21E0199600715036 /* HIAppearance.swift */; };
@@ -241,6 +242,7 @@
 		95E3146621FAF1740092C22E /* SimpleRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleRequest.swift; sourceTree = "<group>"; };
 		95E3146721FAF1740092C22E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		95E3146821FAF1740092C22E /* Announcement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Announcement.swift; sourceTree = "<group>"; };
+		95E4FB5923CC5F980069DB71 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		95F5B49F220BCFFF00C59992 /* HIIndoorMapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIIndoorMapsViewController.swift; sourceTree = "<group>"; };
 		95FC1D1D1FCBD20E00F8AD60 /* HIUserDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HIUserDetailViewController.swift; sourceTree = "<group>"; };
 		95FC79BD21E0199600715036 /* HIAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIAppearance.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 		95A7D279203D4F54005EAEAF /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				95E4FB5823CC5F800069DB71 /* Assets */,
 				95069260203EE14000D7C34C /* Animations */,
 				95FC79BD21E0199600715036 /* HIAppearance.swift */,
 				95A7D27B203D4F54005EAEAF /* HIButton.swift */,
@@ -564,6 +567,14 @@
 				3C8F62D3238F9639001A5DAF /* Time.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		95E4FB5823CC5F800069DB71 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				95E4FB5923CC5F980069DB71 /* Images.swift */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		95FC79BF21E0243000715036 /* Misc */ = {
@@ -805,6 +816,7 @@
 				956F41E11FC7577500557DC7 /* HIAnnouncementsViewController.swift in Sources */,
 				95A7D290203D4F54005EAEAF /* HIAnnouncementCell.swift in Sources */,
 				9515E43722093E1300BCAF92 /* HIEventScannerViewController.swift in Sources */,
+				95E4FB5A23CC5F980069DB71 /* Images.swift in Sources */,
 				95A7D28F203D4F54005EAEAF /* HIEventCell.swift in Sources */,
 				95FC1D1E1FCBD20E00F8AD60 /* HIUserDetailViewController.swift in Sources */,
 				95C3BE302008B99C0008ED79 /* HIBaseViewController.swift in Sources */,
@@ -903,7 +915,7 @@
 				DEVELOPMENT_TEAM = 8VNQTQM2L6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Stickers/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.hackillinois.ios.stickers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -922,7 +934,7 @@
 				DEVELOPMENT_TEAM = 8VNQTQM2L6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Stickers/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.hackillinois.ios.stickers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -979,7 +991,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1032,7 +1044,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
