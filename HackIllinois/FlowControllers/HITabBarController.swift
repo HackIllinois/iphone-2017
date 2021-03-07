@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 class HITabBarController: UITabBarController {
-    lazy var qrPopup = HIPopupViewController()
+    lazy var scannerViewContoller = HIEventScannerViewController()
     private var tabBarShapeLayer: CAShapeLayer?
 
     // Animation for when a tab bar item is clicked
@@ -42,9 +42,8 @@ class HITabBarController: UITabBarController {
     }
 
     @objc private func qrButtonPressed(_ sender: UIButton) {
-        qrPopup.modalPresentationStyle = .overCurrentContext
-        qrPopup.transitioningDelegate = qrPopup
-        self.present(qrPopup, animated: true, completion: nil)
+        scannerViewContoller.modalPresentationStyle = .overCurrentContext
+        self.present(scannerViewContoller, animated: true, completion: nil)
     }
 
     init() {
