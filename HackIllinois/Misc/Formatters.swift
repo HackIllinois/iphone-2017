@@ -22,6 +22,7 @@ extension Formatter {
     static let simpleTime: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
+        formatter.timeZone = TimeZone(identifier: "America/Chicago")
         return formatter
     }()
 }
