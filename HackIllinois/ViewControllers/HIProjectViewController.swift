@@ -21,7 +21,8 @@ class HIProjectViewController: HIProjectListViewController {
 
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "number", ascending: true),
-            NSSortDescriptor(key: "name", ascending: true)
+            NSSortDescriptor(key: "name", ascending: true),
+            NSSortDescriptor(key: "id", ascending: true)
         ]
 
         fetchRequest.predicate = currentPredicate()

@@ -24,7 +24,9 @@ class HIHomeViewController: HIEventListViewController {
 
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "startTime", ascending: true),
-            NSSortDescriptor(key: "name", ascending: true)
+            NSSortDescriptor(key: "endTime", ascending: true),
+            NSSortDescriptor(key: "name", ascending: true),
+            NSSortDescriptor(key: "id", ascending: true)
         ]
 
         fetchRequest.predicate = currentPredicate()
